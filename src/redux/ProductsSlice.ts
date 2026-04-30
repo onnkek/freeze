@@ -218,14 +218,15 @@ const ProductsSlice = createSlice({
         state.products = action.payload
       })
 
-      // .addCase(createProduct.pending, (state: IProducts) => {
-      //   state.status = Status.Loading
-      // })
-      // .addCase(createProduct.fulfilled, (state: IProducts, action) => {
-
-      //   state.products = action.payload
-      //   state.status = Status.Succeeded
-      // })
+      .addCase(createProduct.pending, (state: IProducts) => {
+        state.status = Status.Loading
+      })
+      .addCase(createProduct.fulfilled, (state: IProducts, action) => {
+        const newProds = [...state.products];
+        newProds.push(action.payload)
+        state.products = newProds
+        state.status = Status.Succeeded
+      })
   }
 })
 
@@ -240,39 +241,39 @@ export const getProducts = createAsyncThunk(
 type NewProduct = {
   category: string
   name: string
-  qty: number
+  qyolity: number
   unit: string
   date: string
   months: number
 }
-export const createProduct = createAsyncThunk<IProduct[], NewProduct, { state: RootState }>(
+export const createProduct = createAsyncThunk<IProduct, NewProduct, { state: RootState }>(
 
   'products/createProduct',
   async (payload: NewProduct, { rejectWithValue, getState, dispatch }) => {
-
+    console.log("THUNK")
     const expiresDate = new Date(payload.date + 'T00:00:00');  // YYYY-MM-DD → Date
     expiresDate.setMonth(expiresDate.getMonth() + payload.months);
     const expiresAt = expiresDate.toISOString().split('T')[0];  // YYYY-MM-DD
 
-
+    console.log("newProduct")
     const newProduct: IProduct = {
-      id: crypto.randomUUID(),
+      id:"1",
       category: payload.category,
       name: payload.name,
-      qty: payload.qty,
+      qty: payload.qyolity,
       unit: payload.unit,
       frozenAt: payload.date,
       months: payload.months,
       expiresAt: expiresAt,
       used: false
     }
-
+    console.log("BEFORE createProduct")
     const response = await new ProductsService().createProduct(newProduct)
 
     if (!response.ok) {
       return rejectWithValue('Can\'t delete post! Server error!')
     }
-    return response.body
+    return newProduct
 
   }
 )

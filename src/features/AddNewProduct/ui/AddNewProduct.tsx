@@ -25,20 +25,22 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
   const status = useAppSelector(state => state.products.status)
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Мясо");
-  const [qty, setQty] = useState(1);
+  const [qty, setQty] = useState("1");
   const [unit, setUnit] = useState("кг");
   const [date, setDate] = useState(new Date(Date.now()).toISOString().split('T')[0]);
-  const [months, setMonths] = useState(6);
+  const [months, setMonths] = useState("6");
 
   const addNewProductHandler = async () => {
+    const qyolity = parseFloat(qty)
+    const ms = parseFloat(months)
     await dispatch(createProduct({
 
       name,
       category,
-      qty,
+      qyolity,
       unit,
       date,
-      months
+      months: ms
 
     }));
     if (status === Status.Succeeded) {
@@ -69,7 +71,7 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
         </div>
         <div className={cls.field}>
           <label htmlFor="performance">Количество</label>
-          <input id="performance" type="number" value={qty} onChange={(e) => setQty(Number(e.target.value))} />
+          <input id="performance" type="text" inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
         </div>
         {/* <div className={cls.field}>
           <label htmlFor="remaining">Ед. изм.</label>
@@ -80,6 +82,7 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
           <select id="dose" onChange={(e) => setUnit(e.currentTarget.value)} value={unit}>
             <option value="кг">кг</option>
             <option value="шт">шт</option>
+            <option value="л">л</option>
           </select>
         </div>
         <div className={cls.field}>
@@ -88,7 +91,7 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
         </div>
         <div className={`${cls.field} ${cls.m0}`}>
           <label htmlFor="maxVolume">Срок хранения</label>
-          <input id="maxVolume" type="number" value={months} onChange={(e) => setMonths(Number(e.target.value))} />
+          <input id="maxVolume" type="text" inputMode="decimal"  value={months} onChange={(e) => setMonths(e.target.value)} />
         </div>
       </section>
     </Modal>

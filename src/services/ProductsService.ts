@@ -8,7 +8,7 @@ export default class AquariumService {
 
 
   constructor() {
-    this._apiBase = "http://localhost:8000"
+    this._apiBase = "http://192.168.1.143:8000"
     this._apiProducts = "products"
     this._apiSettings = "settings"
   }
@@ -32,6 +32,7 @@ export default class AquariumService {
     return await response.json()
   }
   createProduct = async (data: IProduct) => {
+    console.log("createProduct вызван, data:", data);
     const response = await fetch(`${this._apiBase}/${this._apiProducts}/create`, {
       method: "POST",
       headers: {
@@ -39,6 +40,7 @@ export default class AquariumService {
       },
       body: JSON.stringify(data)
     })
+    console.log("POST");
     return await response.json()
   }
   updateProducts = async (data: IProduct[]) => {
