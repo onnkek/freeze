@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Инвентаризация продуктов</title>
+  <style>
+    :root {
+      --bg: #121212; --card-bg: #1e1e1e; --text: #e0e0e0;
+      --text-muted: #a0a0a0; --accent: #6a5acd; --border: #2a2a2a;
+      --danger: #e53935; --success: #43a047;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+    .container { max-width: 100%; padding: 12px; }
+    .app-header { padding: 16px 12px 12px; text-align: center; border-bottom: 1px solid var(--border); }
+    .app-title { font-size: 1.4rem; font-weight: 600; }
+    .controls { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+    .search-input, .select-sort, .select-category {
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+      border-radius: 8px; background: #2a2a2a; color: var(--text);
+      font-size: 0.95rem;
+    }
+    .search-input:focus, .select-sort:focus, .select-category:focus {
+      outline: none; border-color: var(--accent);
+    }
+    .btn {
+      padding: 9px 14px; border-radius: 8px; border: none;
+      font-size: 0.9rem; font-weight: 500; cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: #5a4cc9; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-outline {
+      background: transparent; color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-sm { padding: 6px 10px; font-size: 0.85rem; }
+    .flex-row { display: flex; align-items: center; }
+    .flex-row button { margin-left: 6px; }
+    .products-list {
+      display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
+    }
+    .product-card {
+      padding: 12px 14px; background: var(--card-bg);
+      border-radius: 10px; border: 1px solid var(--border);
+    }
+    .product-card.archive { opacity: 0.75; border-color: #404040; }
+    .product-name { font-size: 1.05rem; font-weight: 500; margin-bottom: 4px; }
+    .product-meta { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.85rem; color: var(--text-muted); }
+    .product-meta span {
+      padding: 3px 6px; border-radius: 4px; background: #2c2c2c;
+    }
+    .product-actions {
+      margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .product-actions button { flex: 1; min-width: 70px; }
+    .archive-toggle {
+      margin-top: 4px; font-size: 0.85rem; color: var(--text-muted);
+    }
+    .archive-toggle input { margin-right: 4px; }
+    .modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7); display: none; align-items: center;
+      justify-content: center; z-index: 1000;
+    }
+    .modal.open { display: flex; }
+    .modal-content {
+      width: 90%; max-width: 400px; background: var(--card-bg);
+      border-radius: 12px; border: 1px solid var(--border);
+      padding: 18px 16px;
+    }
+    .modal-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 12px; }
+    .modal-body { display: flex; flex-direction: column; gap: 10px; }
+    .modal-footer {
+      margin-top: 14px; display: flex; gap: 8px; justify-content: flex-end;
+    }
+    .modal-footer button { min-width: 80px; }
+    .empty-state {
+      text-align: center; padding: 24px 0; color: var(--text-muted);
+      font-size: 0.95rem; display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="app-header"><h1 class="app-title">Инвентаризация продуктов</h1></div>
+
+    <div class="controls">
+      <input type="text" class="search-input" placeholder="Поиск по названию..." id="searchInput" />
+      <div class="flex-row">
+        <select class="select-sort" id="sortSelect">
+          <option value="nameAsc">По названию (А–Я)</option>
+          <option value="nameDesc">По названию (Я–А)</option>
+          <option value="quantityAsc">Количество ↑</option>
+          <option value="quantityDesc">Количество ↓</option>
+          <option value="dateAsc">Дата добавления ↑</option>
+          <option value="dateDesc">Дата добавления ↓</option>
+        </select>
+      </div>
+      <div class="flex-row">
+        <select class="select-category" id="categorySelect">
+          <option value="">Все категории</option>
+          <option value="Фрукты">Фрукты</option>
+          <option value="Овощи">Овощи</option>
+          <option value="Молочка">Молочка</option>
+          <option value="Мясо">Мясо</option>
+          <option value="Напитки">Напитки</option>
+        </select>
+      </div>
+      <label class="archive-toggle">
+        <input type="checkbox" id="showArchive" /> Показать архив
+      </label>
+    </div>
+
+    <div class="products-list" id="productsList">
+      <div class="product-card" data-id="1" data-category="Фрукты" data-archived="0">
+        <div class="product-name">Яблоки</div>
+        <div class="product-meta">
+          <span>Категория: Фрукты</span>
+          <span>Кол-во: 15 шт</span>
+          <span>Добавлено: 28.04.2026</span>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEditModal(1)">Редактировать</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleArchive(1)">В архив</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(1)">Удалить</button>
+        </div>
+      </div>
+      <div class="product-card" data-id="2" data-category="Овощи" data-archived="0">
+        <div class="product-name">Картофель</div>
+        <div class="product-meta">
+          <span>Категория: Овощи</span>
+          <span>Кол-во: 30 кг</span>
+          <span>Добавлено: 25.04.2026</span>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEditModal(2)">Редактировать</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleArchive(2)">В архив</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(2)">Удалить</button>
+        </div>
+      </div>
+      <div class="product-card archive" data-id="3" data-category="Молочка" data-archived="1">
+        <div class="product-name">Молоко</div>
+        <div class="product-meta">
+          <span>Категория: Молочка</span>
+          <span>Кол-во: 0 шт</span>
+          <span>Добавлено: 20.04.2026</span>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-outline btn-sm" onclick="openEditModal(3)">Редактировать</button>
+          <button class="btn btn-outline btn-sm" onclick="toggleArchive(3)">Из архива</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteProduct(3)">Удалить</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" id="emptyState">Нет продуктов, соответствующих фильтрам.</div>
+  </div>
+
+  <div class="modal" id="editModal">
+    <div class="modal-content">
+      <div class="modal-title">Редактировать продукт</div>
+      <div class="modal-body">
+        <input type="hidden" id="editId" />
+        <input type="text" class="search-input" placeholder="Название" id="editName" />
+        <select class="select-category" id="editCategory">
+          <option value="Фрукты">Фрукты</option>
+          <option value="Овощи">Овощи</option>
+          <option value="Молочка">Молочка</option>
+          <option value="Мясо">Мясо</option>
+          <option value="Напитки">Напитки</option>
+        </select>
+        <input type="text" class="search-input" placeholder="Количество" id="editQuantity" />
+        <input type="text" class="search-input" placeholder="Дата добавления (например, 25.04.2026)" id="editDate" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Отмена</button>
+        <button class="btn btn-primary" onclick="saveEdit()">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function applyFilters() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const category = document.getElementById("categorySelect").value;
+      const showArchive = document.getElementById("showArchive").checked;
+      const sort = document.getElementById("sortSelect").value;
+
+      const cards = Array.from(document.querySelectorAll(".product-card"));
+      let filtered = cards.filter(card => {
+        const name = card.querySelector(".product-name").textContent.toLowerCase();
+        const cardCategory = card.dataset.category;
+        const archived = card.dataset.archived === "1";
+        return (!query || name.includes(query)) &&
+               (!category || cardCategory === category) &&
+               (archived ? showArchive : true);
+      });
+
+      filtered.sort((a, b) => {
+        const aName = a.querySelector(".product-name").textContent.toLowerCase();
+        const bName = b.querySelector(".product-name").textContent.toLowerCase();
+        const aQuantity = parseInt(a.querySelector(".product-meta").innerHTML.match(/Кол-во: (\d+)/)?.[1]) || 0;
+        const bQuantity = parseInt(b.querySelector(".product-meta").innerHTML.match(/Кол-во: (\d+)/)?.[1]) || 0;
+        const aDate = a.querySelector(".product-meta").innerHTML.match(/Добавлено: (\d{2}\.\d{2}\.\d{4})/)?.[1];
+        const bDate = b.querySelector(".product-meta").innerHTML.match(/Добавлено: (\d{2}\.\d{2}\.\d{4})/)?.[1];
+
+        switch (sort) {
+          case "nameAsc": return aName.localeCompare(bName);
+          case "nameDesc": return bName.localeCompare(aName);
+          case "quantityAsc": return aQuantity - bQuantity;
+          case "quantityDesc": return bQuantity - aQuantity;
+          case "dateAsc": return aDate > bDate ? 1 : -1;
+          case "dateDesc": return aDate < bDate ? 1 : -1;
+          default: return 0;
+        }
+      });
+
+      const list = document.getElementById("productsList");
+      while (list.firstChild?.id !== "emptyState")
+        list.firstChild.remove();
+
+      filtered.forEach(card => list.appendChild(card));
+      document.getElementById("emptyState").style.display = filtered.length ? "none" : "block";
+    }
+
+    function toggleArchive(id) {
+      const card = document.querySelector(`[data-id="${id}"]`);
+      const isArchived = card.dataset.archived === "1";
+      if (!isArchived &&
+          card.querySelector(".product-meta").innerHTML.includes("Кол-во: 0 шт")
+          && !confirm("Количество товара 0. Уверены, что перенести в архив?"))
+        return;
+
+      card.dataset.archived = isArchived ? "0" : "1";
+      card.classList.toggle("archive");
+      applyFilters();
+    }
+
+    function deleteProduct(id) {
+      if (confirm("Удалить продукт безвозвратно?"))
+        document.querySelector(`[data-id="${id}"]`).remove(), applyFilters();
+    }
+
+    function openEditModal(id) {
+      const card = document.querySelector(`[data-id="${id}"]`);
+      document.getElementById("editId").value = id;
+      document.getElementById("editName").value = card.querySelector(".product-name").textContent;
+      document.getElementById("editCategory").value = card.dataset.category;
+      document.getElementById("editQuantity").value = card.querySelector(".product-meta").innerHTML.match(/Кол-во: (\d+)/)?.[1] || "";
+      document.getElementById("editDate").value = card.querySelector(".product-meta").innerHTML.match(/Добавлено: (\d{2}\.\d{2}\.\d{4})/)?.[1] || "";
+      document.getElementById("editModal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("editModal").classList.remove("open");
+    }
+
+    function saveEdit() {
+      const id = document.getElementById("editId").value;
+      const name = document.getElementById("editName").value.trim();
+      const category = document.getElementById("editCategory").value;
+      const quantity = document.getElementById("editQuantity").value.trim();
+      const date = document.getElementById("editDate").value.trim();
+
+      if (!name) return alert("Введите название продукта");
+
+      const card = document.querySelector(`[data-id="${id}"]`);
+      card.querySelector(".product-name").textContent = name;
+      card.dataset.category = category;
+      card.querySelector(".product-meta").innerHTML =
+        `<span>Категория: ${category}</span>` +
+        `<span>Кол-во: ${quantity || "0"} шт</span>` +
+        `<span>Добавлено: ${date || "–"}</span>`;
+
+      applyFilters();
+    }
+
+    document.getElementById("searchInput").addEventListener("input", applyFilters);
+    document.getElementById("sortSelect").addEventListener("change", applyFilters);
+    document.getElementById("categorySelect").addEventListener("change", applyFilters);
+    document.getElementById("showArchive").addEventListener("change", applyFilters);
+    applyFilters();
+  </script>
+</body>
+</html>

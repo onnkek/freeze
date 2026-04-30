@@ -1,413 +1,445 @@
 @use "app/styles/variables" as *
 
-:root
-  --bg: #08111f
-  --panel: #101a2d
-  --panel2: #0c1426
-  --line: #22304d
-  --text: #eaf1ff
-  --muted: #9badca
-  --accent: #5dd6c5
-  --accent2: #7aa7ff
-  --danger: #ff6b6b
-  --warn: #ffd166
-  --ok: #58d68d
-  --chip: rgba(255, 255, 255, 0.04)
-  --radius: 18px
-  --shadow: 0 14px 40px rgba(0,0,0,.28)
-
-*
-  box-sizing: border-box
-
-body
-  margin: 0
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
-  background: linear-gradient(180deg,#08111f,#0b1220)
-  color: var(--text)
-
-.wrap
-  max-width: 1400px
-  margin: 0 auto
-  padding: 14px
-
-.topbar, .tabs, .stats, .controls, .form, .btnrow, .actions
-  display: flex
-  gap: 10px
-  flex-wrap: wrap
-
-.topbar
-  align-items: center
-  justify-content: space-between
-  margin-bottom: 12px
-
-h1
-  margin: 0
-  font-size: 24px
-
-p
-  margin: 4px 0 0
-  color: var(--muted)
-
 .productList
-  background: rgba(22, 27, 34, 0.95)
-  border: 1px solid rgba(255,255,255,.06)
-  border-radius: var(--radius)
-  box-shadow: var(--shadow)
-  overflow: hidden
-
-.panelH
-  padding: 14px 16px
-  border-bottom: 1px solid rgba(255,255,255,.06)
+  max-width: 500px
+  padding: 0
   display: flex
-  justify-content: space-between
+  flex-direction: column
   gap: 10px
-  align-items: center
-  flex-wrap: wrap
-
-.panelB
-  padding: 14px
-
-.tabs
-  padding: 0 14px 14px
-
-.tab
-  flex: 1
-  min-width: 140px
-  background: #0c1426
-  color: var(--muted)
-  border: 1px solid rgba(255,255,255,.08)
-  padding: 12px 14px
-  border-radius: 14px
-  font-weight: 700
-  cursor: pointer
-
-  &.active
-    background: linear-gradient(135deg,var(--accent),var(--accent2))
-    color: #06111f
-    border: none
-
-.stats
-  margin-bottom: 12px
-
-.stat
-  flex: 1
-  min-width: 140px
-  background: #0c1426
-  border: 1px solid rgba(255,255,255,.06)
-  border-radius: 16px
-  padding: 12px
-
-  .k
-    color: var(--muted)
-    font-size: 12px
-
-  .v
-    font-size: 24px
-    font-weight: 800
-    margin-top: 4px
-
-.productList
   input, select, .button, textarea
+    // width: 100%
+    // border: 1px solid rgba(255,255,255,.08)
+    // background: #0d1117
+    // color: #22304d
+    // padding: 12px 14px
+    // border-radius: 14px
+    // outline: none
+    // font: inherit
+
     width: 100%
+    height: 48px
+    border-radius: 12px
     border: 1px solid rgba(255,255,255,.08)
-    background: #0c1426
-    color: var(--text)
-    padding: 12px 14px
-    border-radius: 14px
+    background: #0d1117
+    color: #c9d1d9
+    padding: 0 14px
+    font-size: 15px
     outline: none
-    font: inherit
-
-.productList
-  .button
-    cursor: pointer
-    font-weight: 700
-
-.btnAccent
-  background: linear-gradient(135deg,var(--accent),#37b7d5)
-  color: #061a17
-  border: none
-
-.btnBlue
-  background: linear-gradient(135deg,var(--accent2),var(--accent))
-  color: #06111f
-  border: none
-
-.btnDanger
-  background: linear-gradient(135deg,#ff7b7b,#ff5f87)
-  color: #25060c
-  border: none
-  width: 50px
-  height: 20px
-
-.btnGhost
-  
-  width: 30px
-  height: 30px
-  border: none
-  border-radius: 999px
-  background: var(--chip)
-  color: #fff
-  font-size: 20px
-  line-height: 1
-  display: flex
-  align-items: center
-  justify-content: center
-  cursor: pointer
-  opacity: .85
-  padding: 0px
-  align-self: center
-  justify-self: center
-  &:hover
-    opacity: 1
-
-.layout
-  display: grid
-  grid-template-columns: 1fr 360px
-  gap: 14px
-  align-items: start
 
 .controls
-  display: grid
-  grid-template-columns: 1fr 1fr 1fr
+  display: flex
   gap: 10px
+  flex-wrap: wrap
   margin-bottom: 12px
 
-.form
-  display: grid
-  grid-template-columns: 1fr 1fr
-  gap: 10px
+// :root
+//   --bg: #08111f
+//   --panel: #101a2d
+//   --panel2: #0c1426
+//   --line: #22304d
+//   --text: #eaf1ff
+//   --muted: #9badca
+//   --accent: #5dd6c5
+//   --accent2: #7aa7ff
+//   --danger: #ff6b6b
+//   --warn: #ffd166
+//   --ok: #58d68d
+//   --chip: rgba(255, 255, 255, 0.04)
+//   --radius: 18px
+//   --shadow: 0 14px 40px rgba(0,0,0,.28)
 
-.full
-  grid-column: 1 / -1
+// *
+//   box-sizing: border-box
 
-.form textarea
-  min-height: 46px
-  resize: vertical
+// body
+//   margin: 0
+//   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif
+//   background: linear-gradient(180deg,#08111f,#0b1220)
+//   color: var(--text)
 
-table
-  width: 100%
-  border-collapse: collapse
+// .wrap
+//   max-width: 1400px
+//   margin: 0 auto
+//   padding: 14px
 
-th, td
-  padding: 12px 10px
-  border-bottom: 1px solid rgba(255,255,255,.06)
-  text-align: left
-  font-size: 14px
-  vertical-align: middle
+// .topbar, .tabs, .stats, .controls, .form, .btnrow, .actions
+//   display: flex
+//   gap: 10px
+//   flex-wrap: wrap
 
-th
-  position: sticky
-  top: 0
-  background: #0f1830
-  z-index: 1
-  color: #cfe0ff
-  font-size: 11px
-  text-transform: uppercase
-  letter-spacing: .08em
+// .topbar
+//   align-items: center
+//   justify-content: space-between
+//   margin-bottom: 12px
 
-.chip
-  display: inline-flex
-  padding: 6px 10px
-  border-radius: 999px
-  background: var(--chip)
-  border: 1px solid rgba(255,255,255,.06)
-  white-space: nowrap
-  font-size: 12px
-.productList
-  .rowOk
-    background: #0d1117
-    align-items: center
+// h1
+//   margin: 0
+//   font-size: 24px
 
-.rowWarn
-  background: rgba(255,209,102,.06)
+// p
+//   margin: 4px 0 0
+//   color: var(--muted)
 
-.rowBad
-  background: rgba(255,107,107,.08)
+// .productList
+//   background: rgba(22, 27, 34, 0.95)
+//   border: 1px solid rgba(255,255,255,.06)
+//   border-radius: var(--radius)
+//   box-shadow: var(--shadow)
+//   overflow: hidden
 
-.rowUsed
-  opacity: .5
+// .panelH
+//   padding: 14px 16px
+//   border-bottom: 1px solid rgba(255,255,255,.06)
+//   display: flex
+//   justify-content: space-between
+//   gap: 10px
+//   align-items: center
+//   flex-wrap: wrap
 
-.statusOk
-  color: var(--ok)
+// .panelB
+//   padding: 14px
 
-.statusWarn
-  color: var(--warn)
+// .tabs
+//   padding: 0 14px 14px
 
-.statusBad
-  color: var(--danger)
+// .tab
+//   flex: 1
+//   min-width: 140px
+//   background: #0c1426
+//   color: var(--muted)
+//   border: 1px solid rgba(255,255,255,.08)
+//   padding: 12px 14px
+//   border-radius: 14px
+//   font-weight: 700
+//   cursor: pointer
 
-.card
-  background: #0c1426
-  border: 1px solid rgba(255,255,255,.06)
-  border-radius: 16px
-  padding: 14px
+//   &.active
+//     background: linear-gradient(135deg,var(--accent),var(--accent2))
+//     color: #06111f
+//     border: none
 
-.list
-  display: grid
-  gap: 8px
+// .stats
+//   margin-bottom: 12px
 
-  div
-    display: flex
-    justify-content: space-between
-    gap: 10px
-    padding: 8px 10px
-    border-radius: 12px
-    background: #0a1221
-    border: 1px solid rgba(255,255,255,.05)
+// .stat
+//   flex: 1
+//   min-width: 140px
+//   background: #0c1426
+//   border: 1px solid rgba(255,255,255,.06)
+//   border-radius: 16px
+//   padding: 12px
 
-.tableWrap
-  overflow: visible
-  max-height: none
-  border: none
-  border-radius: 0
+//   .k
+//     color: var(--muted)
+//     font-size: 12px
 
-.desktopOnly
-  display: block
+//   .v
+//     font-size: 24px
+//     font-weight: 800
+//     margin-top: 4px
 
-.mobileList
-  display: none
-  gap: 10px
+// .productList
+//   input, select, .button, textarea
+//     width: 100%
+//     border: 1px solid rgba(255,255,255,.08)
+//     background: #0c1426
+//     color: var(--text)
+//     padding: 12px 14px
+//     border-radius: 14px
+//     outline: none
+//     font: inherit
 
-.mitem
-  position: relative
-  background: #0c1426
-  border: 1px solid rgba(255,255,255,.06)
-  border-radius: 16px
-  padding: 14px
+// .productList
+//   .button
+//     cursor: pointer
+//     font-weight: 700
 
-.mclose
-  position: absolute
-  top: 10px
-  right: 10px
-  width: 30px
-  height: 30px
-  border: none
-  border-radius: 999px
-  background: #1a2846
-  color: #fff
-  font-size: 20px
-  line-height: 1
-  display: flex
-  align-items: center
-  justify-content: center
-  cursor: pointer
-  opacity: .85
+// .btnAccent
+//   background: linear-gradient(135deg,var(--accent),#37b7d5)
+//   color: #061a17
+//   border: none
 
-  &:hover
-    opacity: 1
+// .btnBlue
+//   background: linear-gradient(135deg,var(--accent2),var(--accent))
+//   color: #06111f
+//   border: none
 
-.mhead
-  display: flex
-  justify-content: space-between
-  gap: 12px
-  align-items: flex-start
-  padding-right: 34px
+// .btnDanger
+//   background: linear-gradient(135deg,#ff7b7b,#ff5f87)
+//   color: #25060c
+//   border: none
+//   width: 50px
+//   height: 20px
 
-.mname
-  font-size: 16px
-  font-weight: 800
+// .btnGhost
 
-.meta
-  display: grid
-  gap: 6px
-  margin-top: 10px
-  color: #d8e4ff
+//   width: 30px
+//   height: 30px
+//   border: none
+//   border-radius: 999px
+//   background: var(--chip)
+//   color: #fff
+//   font-size: 20px
+//   line-height: 1
+//   display: flex
+//   align-items: center
+//   justify-content: center
+//   cursor: pointer
+//   opacity: .85
+//   padding: 0px
+//   align-self: center
+//   justify-self: center
+//   &:hover
+//     opacity: 1
 
-  div
-    display: flex
-    justify-content: space-between
-    gap: 12px
+// .layout
+//   display: grid
+//   grid-template-columns: 1fr 360px
+//   gap: 14px
+//   align-items: start
 
-.muted
-  color: var(--muted)
-  font-size: 10px
+// .controls
+//   display: grid
+//   grid-template-columns: 1fr 1fr 1fr
+//   gap: 10px
+//   margin-bottom: 12px
 
-.small
-  font-size: 12px
-  color: var(--muted)
+// .form
+//   display: grid
+//   grid-template-columns: 1fr 1fr
+//   gap: 10px
 
-.hide
-  display: none !important
+// .full
+//   grid-column: 1 / -1
 
-@media (max-width: 1080px)
-  .layout
-    grid-template-columns: 1fr
+// .form textarea
+//   min-height: 46px
+//   resize: vertical
 
-  .sidebar
-    order: 2
+// table
+//   width: 100%
+//   border-collapse: collapse
 
-  .productList
-    order: 1
+// th, td
+//   padding: 12px 10px
+//   border-bottom: 1px solid rgba(255,255,255,.06)
+//   text-align: left
+//   font-size: 14px
+//   vertical-align: middle
 
-@media (max-width: 760px)
-  .wrap
-    padding: 10px
+// th
+//   position: sticky
+//   top: 0
+//   background: #0f1830
+//   z-index: 1
+//   color: #cfe0ff
+//   font-size: 11px
+//   text-transform: uppercase
+//   letter-spacing: .08em
 
-  .topbar
-    align-items: flex-start
+// .chip
+//   display: inline-flex
+//   padding: 6px 10px
+//   border-radius: 999px
+//   background: var(--chip)
+//   border: 1px solid rgba(255,255,255,.06)
+//   white-space: nowrap
+//   font-size: 12px
+// .productList
+//   .rowOk
+//     background: #0d1117
+//     align-items: center
 
-  .controls, .form
-    grid-template-columns: 1fr
+// .rowWarn
+//   background: rgba(255,209,102,.06)
 
-  .stats
-    display: grid
-    grid-template-columns: 1fr 1fr
+// .rowBad
+//   background: rgba(255,107,107,.08)
 
-  .tableWrap
-    display: none
+// .rowUsed
+//   opacity: .5
 
-  .mobileList
-    display: grid
+// .statusOk
+//   color: var(--ok)
 
-  .panelH
-    padding: 12px 12px 10px
+// .statusWarn
+//   color: var(--warn)
 
-  .panelB
-    padding: 12px
+// .statusBad
+//   color: var(--danger)
 
-  .tabs
-    padding: 0 12px 12px
+// .card
+//   background: #0c1426
+//   border: 1px solid rgba(255,255,255,.06)
+//   border-radius: 16px
+//   padding: 14px
 
-  .tab
-    padding: 11px 12px
+// .list
+//   display: grid
+//   gap: 8px
 
-  .stat .v
-    font-size: 22px
+//   div
+//     display: flex
+//     justify-content: space-between
+//     gap: 10px
+//     padding: 8px 10px
+//     border-radius: 12px
+//     background: #0a1221
+//     border: 1px solid rgba(255,255,255,.05)
 
-  .mitem
-    padding: 12px
+// .tableWrap
+//   overflow: visible
+//   max-height: none
+//   border: none
+//   border-radius: 0
 
-  .mname
-    font-size: 15px
+// .desktopOnly
+//   display: block
 
-  .meta div
-    display: flex
-    flex-direction: column
-    align-items: flex-start
-    gap: 4px
+// .mobileList
+//   display: none
+//   gap: 10px
 
-  .actions button
-    flex: 1
-    min-width: 120px
-  .productList
-    .btnGhost
-      position: absolute
-      top: 10px
-      right: 10px
-      width: 30px
-      height: 30px
-      border: none
-      border-radius: 999px
-      background: var(--chip)
-      color: #fff
-      font-size: 20px
-      line-height: 1
-      display: flex
-      align-items: center
-      justify-content: center
-      cursor: pointer
-      opacity: .85
-      padding: 0px
+// .mitem
+//   position: relative
+//   background: #0c1426
+//   border: 1px solid rgba(255,255,255,.06)
+//   border-radius: 16px
+//   padding: 14px
 
-      &:hover
-        opacity: 1
+// .mclose
+//   position: absolute
+//   top: 10px
+//   right: 10px
+//   width: 30px
+//   height: 30px
+//   border: none
+//   border-radius: 999px
+//   background: #1a2846
+//   color: #fff
+//   font-size: 20px
+//   line-height: 1
+//   display: flex
+//   align-items: center
+//   justify-content: center
+//   cursor: pointer
+//   opacity: .85
+
+//   &:hover
+//     opacity: 1
+
+// .mhead
+//   display: flex
+//   justify-content: space-between
+//   gap: 12px
+//   align-items: flex-start
+//   padding-right: 34px
+
+// .mname
+//   font-size: 16px
+//   font-weight: 800
+
+// .meta
+//   display: grid
+//   gap: 6px
+//   margin-top: 10px
+//   color: #d8e4ff
+
+//   div
+//     display: flex
+//     justify-content: space-between
+//     gap: 12px
+
+// .muted
+//   color: var(--muted)
+//   font-size: 10px
+
+// .small
+//   font-size: 12px
+//   color: var(--muted)
+
+// .hide
+//   display: none !important
+
+// @media (max-width: 1080px)
+//   .layout
+//     grid-template-columns: 1fr
+
+//   .sidebar
+//     order: 2
+
+//   .productList
+//     order: 1
+
+// @media (max-width: 760px)
+//   .wrap
+//     padding: 10px
+
+//   .topbar
+//     align-items: flex-start
+
+//   .controls, .form
+//     grid-template-columns: 1fr
+
+//   .stats
+//     display: grid
+//     grid-template-columns: 1fr 1fr
+
+//   .tableWrap
+//     display: none
+
+//   .mobileList
+//     display: grid
+
+//   .panelH
+//     padding: 12px 12px 10px
+
+//   .panelB
+//     padding: 12px
+
+//   .tabs
+//     padding: 0 12px 12px
+
+//   .tab
+//     padding: 11px 12px
+
+//   .stat .v
+//     font-size: 22px
+
+//   .mitem
+//     padding: 12px
+
+//   .mname
+//     font-size: 15px
+
+//   .meta div
+//     display: flex
+//     flex-direction: column
+//     align-items: flex-start
+//     gap: 4px
+
+//   .actions button
+//     flex: 1
+//     min-width: 120px
+//   .productList
+//     .btnGhost
+//       position: absolute
+//       top: 10px
+//       right: 10px
+//       width: 30px
+//       height: 30px
+//       border: none
+//       border-radius: 999px
+//       background: var(--chip)
+//       color: #fff
+//       font-size: 20px
+//       line-height: 1
+//       display: flex
+//       align-items: center
+//       justify-content: center
+//       cursor: pointer
+//       opacity: .85
+//       padding: 0px
+
+//       &:hover
+//         opacity: 1

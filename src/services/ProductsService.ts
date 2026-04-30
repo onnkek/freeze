@@ -8,7 +8,7 @@ export default class AquariumService {
 
 
   constructor() {
-    this._apiBase = "http://192.168.1.143:8000"
+    this._apiBase = "http://192.168.1.136:8000"
     this._apiProducts = "products"
     this._apiSettings = "settings"
   }

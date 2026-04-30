@@ -1,0 +1,221 @@
+@use "app/styles/variables" as *
+
+.card
+  position: relative
+  cursor: pointer
+  background: #0c1426
+  border: none
+  border-radius: 16px
+  padding: 0
+  // Добавляем transition вместо повторной краткой анимации
+  transition: transform 0.15s cubic-bezier(0.34, 0.16, 0.25, 1)
+  will-change: transform
+  user-select: none
+
+  // при открытии меню
+  &.active
+    --offset: var(--card-offset, 0px)
+    z-index: 1002
+    transform: translateY(var(--offset, 0px))
+
+  // при закрытии меню
+  &.closing
+    --offset: var(--card-offset, 0px)
+    transform: translateY(0)
+
+.backdrop
+  position: fixed
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background: rgba(0, 0, 0, 0)
+  z-index: 1000
+  backdrop-filter: blur(0px)
+  will-change: background, backdrop-filter
+  transition: background 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), backdrop-filter 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+
+  // когда добавляем .backdropOut — начинаем исчезать
+  &.backdropOut
+    background: rgba(0, 0, 0, 0) !important
+    backdrop-filter: blur(0px) !important
+
+.menu
+  position: fixed
+  width: 250px
+  max-width: calc(100vw - 40px)
+  background: #0d1117
+  border: 1px solid rgba(255, 255, 255, 0.06)
+  border-radius: 16px
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3)
+  padding: 0
+  z-index: 1001
+  overflow: hidden
+  right: 20px
+  // изначально невидимое
+  opacity: 0
+  transform: translateX(24px) scale(0.92)
+  will-change: opacity, transform
+
+.menu.ready
+  opacity: 1
+  transform: translateX(0) scale(1)
+
+// состояние блокировок при закрытии
+.menu.hoverBlocked
+  user-select: none
+  touch-action: none
+  .menuItem
+    &:hover
+      background: none !important
+    transition: none
+
+.alignCenter
+  display: flex
+  flex-direction: column
+
+.menuItem
+  padding: 10px 20px
+  border: none
+  background: none
+  width: 100%
+  text-align: left
+  font-size: 17px
+  font-weight: 500
+  cursor: pointer
+  transition: all 0.08s ease
+  display: flex
+  align-items: center
+  gap: 16px
+  min-height: 56px
+
+  &:hover
+    background: rgba(100, 100, 100, 0.05)
+
+  &:active
+    background: rgba(100, 100, 100, 0.05)
+    transform: scale(0.98)
+
+  &.pressed
+    // background: rgba(100, 100, 100, 0.05)
+
+.edit
+  color: #d8e4ff
+
+.delete
+  color: #d93025
+
+.devider
+  position: relative
+  width: 100%
+  height: 30px
+  &::before
+    content: ""
+    position: absolute
+    bottom: calc(50% - 1px)
+    width: 100%
+    height: 1px
+    background-color: rgba(255, 255, 255, 0.06)
+
+.below
+  margin-top: 12px
+
+// эффект бэкдропа: появляется, исчезает
+@keyframes backdropFadeIn
+  from
+    background: rgba(0, 0, 0, 0)
+    backdrop-filter: blur(0px)
+  to
+    background: rgba(0, 0, 0, 0.7)
+    backdrop-filter: blur(15px)
+
+// позиция карточки при открытии
+@keyframes cardLiftSimple
+  from
+    transform: translateY(0)
+  to
+    transform: translateY(var(--card-offset, 0px))
+
+// позиция карточки при закрытии (обратная анимация)
+@keyframes cardDropSimple
+  from
+    transform: translateY(var(--card-offset, 0px))
+  to
+    transform: translateY(0)
+
+// появление меню
+@keyframes menuSlideInRight
+  from
+    opacity: 0
+    transform: translateX(24px) scale(0.92)
+  to
+    opacity: 1
+    transform: translateX(0) scale(1)
+
+// исчезновение меню
+@keyframes menuSlideOutRight
+  from
+    opacity: 1
+    transform: translateX(0) scale(1)
+  to
+    opacity: 0
+    transform: translateX(24px) scale(0.92)
+
+// дополнительные классы для эффектов
+.card.active
+  animation: cardLiftSimple 0.15s cubic-bezier(0.34, 0.16, 0.25, 1) forwards
+
+.card.closing
+  animation: cardDropSimple 0.15s cubic-bezier(0.34, 0.16, 0.25, 1) forwards
+
+.menu.ready
+  animation: menuSlideInRight 0.05s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards
+
+.menu.menuOut
+  animation: menuSlideOutRight 0.05s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards
+
+// оформление карточки
+.mitem
+  position: relative
+  background: #0c1426
+  border: 1px solid rgba(255, 255, 255, 0.06)
+  border-radius: 16px
+  padding: 14px
+
+.rowOk
+  background: #0d1117
+  align-items: center
+
+.small
+  font-size: 12px
+  color: #9badca
+
+.chip
+  display: inline-flex
+  padding: 6px 10px
+  border-radius: 999px
+  background: rgba(255, 255, 255, 0.04)
+  border: 1px solid rgba(255, 255, 255, 0.06)
+  white-space: nowrap
+  font-size: 12px
+
+.meta
+  display: grid
+  gap: 6px
+  margin-top: 10px
+  color: #d8e4ff
+
+.meta div
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  gap: 4px
+
+.muted
+  color: #9badca
+  font-size: 10px
+
+.title
+  display: flex
+  align-items: center
+  justify-content: space-between

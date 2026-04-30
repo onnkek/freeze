@@ -2,7 +2,7 @@ import { classNames } from "shared/lib/classNames";
 import cls from './AddNewProduct.module.sass';
 import { useAppDispatch, useAppSelector } from "models/Hook";
 import { useEffect, useState } from "react";
-import { createProduct, getProducts } from "redux/ProductsSlice";
+import { createProduct, getProducts, IProduct, updateProduct } from "redux/ProductsSlice";
 import { Modal } from "shared/ui/Modal";
 import { Status } from "models/Status";
 
@@ -10,9 +10,10 @@ export interface AddNewProductProps {
   className?: string;
   isOpen?: boolean;
   onClose: () => void
+  product?: IProduct
 }
 
-export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps) => {
+export const AddNewProduct = ({ className, isOpen, onClose, product }: AddNewProductProps) => {
 
   const dispatch = useAppDispatch()
 
@@ -23,26 +24,41 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
   const categories = useAppSelector(state => state.settings.category)
 
   const status = useAppSelector(state => state.products.status)
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("Мясо");
-  const [qty, setQty] = useState("1");
-  const [unit, setUnit] = useState("кг");
-  const [date, setDate] = useState(new Date(Date.now()).toISOString().split('T')[0]);
-  const [months, setMonths] = useState("6");
+  const [name, setName] = useState(product?.name || "");
+  const [category, setCategory] = useState(product?.category || "Мясо");
+  const [qty, setQty] = useState(product?.qty || "1");
+  const [unit, setUnit] = useState(product?.unit || "кг");
+  const [date, setDate] = useState(product?.frozenAt || new Date(Date.now()).toISOString().split('T')[0]);
+  const [months, setMonths] = useState(product?.months || "6");
 
   const addNewProductHandler = async () => {
-    const qyolity = parseFloat(qty)
-    const ms = parseFloat(months)
-    await dispatch(createProduct({
+    const qyolity = qty
+    const ms = months
 
-      name,
-      category,
-      qyolity,
-      unit,
-      date,
-      months: ms
+    if (product) {
+      await dispatch(updateProduct({
+        id: product.id,
+        name,
+        category,
+        qty: qyolity,
+        unit,
+        frozenAt: date,
+        months: ms,
+        expiresAt: product.expiresAt,
+        used: product.used
+      }));
+    } else {
+      await dispatch(createProduct({
+        name,
+        category,
+        qyolity,
+        unit,
+        date,
+        months: ms
+      }));
+    }
 
-    }));
+
     if (status === Status.Succeeded) {
       dispatch(getProducts())
     }
@@ -91,7 +107,7 @@ export const AddNewProduct = ({ className, isOpen, onClose }: AddNewProductProps
         </div>
         <div className={`${cls.field} ${cls.m0}`}>
           <label htmlFor="maxVolume">Срок хранения</label>
-          <input id="maxVolume" type="text" inputMode="decimal"  value={months} onChange={(e) => setMonths(e.target.value)} />
+          <input id="maxVolume" type="text" inputMode="decimal" value={months} onChange={(e) => setMonths(e.target.value)} />
         </div>
       </section>
     </Modal>
